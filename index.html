@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HR Vista — Frontend + Backend Development Specification</title>
+    <style>
+        :root {
+            --primary: #1e3a8a;
+            --primary-light: #eff6ff;
+            --accent: #2563eb;
+            --text-main: #1f2937;
+            --text-muted: #4b5563;
+            --bg-main: #f8fafc;
+            --bg-card: #ffffff;
+            --border: #e2e8f0;
+            --p0: #ef4444;
+            --p1: #f59e0b;
+            --p2: #3b82f6;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
+                Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            line-height: 1.6;
+            display: flex;
+        }
+
+        /* Sidebar Navigation */
+        .sidebar {
+            width: 280px;
+            height: 100vh;
+            background-color: var(--bg-card);
+            border-right: 1px solid var(--border);
+            position: fixed;
+            top: 0;
+            left: 0;
+            padding: 2rem 1.5rem;
+            overflow-y: auto;
+        }
+
+        .sidebar h2 {
+            font-size: 1.25rem;
+            color: var(--primary);
+            margin-bottom: 2rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--primary-light);
+        }
+
+        .sidebar ul {
+            list-style: none;
+        }
+
+        .sidebar li {
+            margin-bottom: 0.75rem;
+        }
+
+        .sidebar a {
+            text-decoration: none;
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            display: block;
+            padding: 0.5rem 0.75rem;
+            border-radius: 6px;
+            transition: all 0.2s;
+        }
+
+        .sidebar a:hover {
+            background-color: var(--primary-light);
+            color: var(--accent);
+            padding-left: 1rem;
+        }
+
+        /* Main Content Container */
+        .main-content {
+            margin-left: 280px;
+            padding: 3rem 4rem;
+            max-width: 1100px;
+            width: 100%;
+        }
+
+        header {
+            margin-bottom: 3rem;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 2rem;
+        }
+
+        .badge-live {
+            background-color: #dcfce7;
+            color: #15803d;
+            padding: 0.25rem 0.75rem;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 0.5rem;
+        }
+
+        h1 {
+            font-size: 2.25rem;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        section {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2.5rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            scroll-margin-top: 2rem;
+        }
+
+        h2.section-title {
+            font-size: 1.5rem;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        p {
+            margin-bottom: 1rem;
+            color: var(--text-main);
+        }
+
+        /* Table Styling */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+        }
+
+        th, td {
+            padding: 0.75rem 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        th {
+            background-color: var(--primary-light);
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .priority-p0 {
+            color: var(--p0);
+            font-weight: bold;
+        }
+
+        .priority-p1 {
+            color: var(--p1);
+            font-weight: bold;
+        }
+
+        .priority-p2 {
+            color: var(--p2);
+            font-weight: bold;
+        }
+
+        .status-badge {
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .status-dev {
+            background-color: #fef3c7;
+            color: #d97706;
+        }
+
+        .status-up {
+            background-color: #f1f5f9;
+            color: #64748b;
+        }
+
+        /* Feature Details Split */
+        .dev-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .dev-box {
+            background-color: var(--bg-main);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1.25rem;
+        }
+
+        .dev-box h4 {
+            color: var(--accent);
+            margin-bottom: 0.75rem;
+            font-size: 1.05rem;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 0.25rem;
+        }
+
+        ul.rules-list,
+        ul.api-list {
+            list-style-type: none;
+        }
+
+        ul.rules-list li {
+            position: relative;
+            padding-left: 1.5rem;
+            margin-bottom: 0.75rem;
+        }
+
+        ul.rules-list li::before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: var(--accent);
+            font-weight: bold;
+        }
+
+        .api-tag {
+            background-color: #e0f2fe;
+            color: #0369a1;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 0.85rem;
+            display: inline-block;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Order List Component */
+        ol.build-order {
+            padding-left: 1.5rem;
+        }
+
+        ol.build-order li {
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        /* Footer Principle Note */
+        .principle-box {
+            background-color: #faf5ff;
+            border-left: 4px solid #a855f7;
+            padding: 1.5rem;
+            border-radius: 0 8px 8px 0;
+            margin-top: 2rem;
+        }
+
+        .principle-box h3 {
+            color: #7e22ce;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Responsive Layout */
+        @media (max-width: 768px) {
+            body {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 1.5rem;
+            }
+
+            .dev-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Sidebar Navigation -->
+    <nav class="sidebar">
+        <h2>HR Vista Spec</h2>
+
+        <ul>
+            <li><a href="#baseline">1. Current Baseline</a></li>
+            <li><a href="#features">2. Features Roadmap</a></li>
+            <li><a href="#rules">3. Core Dev Rules</a></li>
+            <li><a href="#module-4-1">4.1 Employee Profile</a></li>
+            <li><a href="#module-4-2">4.2 Career Passport</a></li>
+            <li><a href="#module-4-3">4.3 AI Helpdesk</a></li>
+            <li><a href="#module-4-4">4.4 Asset Management</a></li>
+            <li><a href="#module-4-5">4.5 Training Tracker</a></li>
+            <li><a href="#module-4-6">4.6 Recognition Hub</a></li>
+            <li><a href="#module-4-7">4.7 Exit Management</a></li>
+            <li><a href="#module-4-8">4.8 Biometrics</a></li>
+            <li><a href="#auth">5. Auth & Permissions</a></li>
+            <li><a href="#deliverables-fe">6. Frontend Deliverables</a></li>
+            <li><a href="#deliverables-be">7. Backend Deliverables</a></li>
+            <li><a href="#build-order">8. Build Order</a></li>
+            <li><a href="#dod">9. Definition of Done</a></li>
+        </ul>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+
+        <header>
+            <h1>HR VISTA</h1>
+
+            <div class="subtitle">
+                Frontend + Backend Development Specification
+            </div>
+
+            <p style="margin-top: 0.5rem; color: var(--text-muted);">
+                Engineering handoff for the next product-development phase
+            </p>
+        </header>
+
+        <!-- Section 1 -->
+        <section id="baseline">
+
+            <h2 class="section-title">
+                1. Current Baseline
+            </h2>
+
+            <p>
+                The current HR Vista MVP has Dashboard, Employees, Attendance,
+                Leave, Payroll, Recruitment, Reports and Settings.
+                The new work must extend the existing product without breaking
+                these modules.
+            </p>
+
+            <a href="https://vercel.app"
+               target="_blank"
+               class="badge-live">
+                Live MVP Link 🔗
+            </a>
+
+            <p style="font-size: 0.85rem; color: var(--p0); margin-top: 0.5rem;">
+                * Note: visible dashboard figures are demo/sample data and
+                must not be presented as real traction.
+            </p>
+
+        </section>
+
+        <!-- Section 2 -->
+        <section id="features">
+                    <h2 class="section-title">
+                2. Features to Develop
+            </h2>
+
+            <table>
+
+                <thead>
+                    <tr>
+                        <th>Priority</th>
+                        <th>Feature</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    <tr><td class="priority-p0">P0</td>
+                        <td>Digital Employee Profile</td>
+                        <td><span class="status-babge status-dev">
+                            IN DEVELOPMENT</span><Td></Tr>
+                            <tr><td class="priority-p0">p0</td><td>
+                                Career Passport</td><td><Span 
+                                    class="status-babge status-dev">IN DEVELOPMENT
+                                </Span></td></tr><tr></tr><td class="priority-p1">p1></td><td>
+                                    AL Employee Helpdesk/HRTicketing<td></td>
+                                </td>Spanclass="status-babge status dev">IN DEVELOPMENT</Span></td></tbody>tr>                       
